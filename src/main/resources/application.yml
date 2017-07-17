@@ -1,10 +1,13 @@
+#name of the discovery-server app
 spring:
   application:
     name: discovery-server
+#dev settings to remove during production
 eureka:
   client:
     register-with-eureka: false
     fetch-registry: false
+#server port settings
 server:
   port: 8761
 
