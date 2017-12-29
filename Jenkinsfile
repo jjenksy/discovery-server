@@ -72,7 +72,7 @@ input 'Deploy?'
 
 stage name: 'Deploy', concurrency: 1
 node {
-    sh "<h1>echo 'Deploy: {env.BUILD_DISPLAY_NAME}</h1>'"
+    //sh "<h1>echo 'Deploy: {env.BUILD_DISPLAY_NAME}</h1>'"
     //run the docker compose
     // sh 'docker-compose up -d --build'
 }
