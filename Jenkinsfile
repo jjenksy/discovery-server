@@ -13,6 +13,7 @@ stage ('Checkout'){
     }
 
      mvnHome = tool 'M3'
+     dockerHome = tool 'D3'
 }
 // stage ('Verify'){
 //     try {
@@ -80,7 +81,7 @@ def notify(status){
 //node {
     //sh "<h1>echo 'Deploy: {env.BUILD_DISPLAY_NAME}</h1>'"
     //run the docker compose
-   // sh 'D3 build --file=Dockerfile --tag=discovery-server:latest --rm=true .'
+   // sh 'dockerHome build --file=Dockerfile --tag=discovery-server:latest --rm=true .'
     //docker run --name=discovery-server --publish=8080:8080  discovery-server:latests
 
 //}
