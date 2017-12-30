@@ -59,7 +59,7 @@ stage ('archival') {
 }
 
 stage ('deploy'){
-    //sh 'D3 build --file=Dockerfile --tag=discovery-server:latest --rm=true .'
+     sh '/mvnw install dockerfile:build'
      notify('Complete')
 }
 
