@@ -13,7 +13,6 @@ stage ('Checkout'){
     }
 
      mvnHome = tool 'M3'
-     dockerHome = tool 'D3'
 }
 // stage ('Verify'){
 //     try {
