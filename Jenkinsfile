@@ -55,7 +55,12 @@ stage ('archival') {
                artifacts: "target/*.?ar",
                excludes: null])
 
-        notify('Complete')
+
+}
+
+stage ('deploy'){
+    sh 'D3 build --file=Dockerfile --tag=discovery-server:latest --rm=true .'
+     notify('Complete')
 }
 
 }
@@ -69,13 +74,13 @@ def notify(status){
     )
 }
 
-input 'Deploy?'
+//input 'Deploy?'
 
-stage name: 'Deploy', concurrency: 1
-node {
+//stage name: 'Deploy', concurrency: 1
+//node {
     //sh "<h1>echo 'Deploy: {env.BUILD_DISPLAY_NAME}</h1>'"
     //run the docker compose
-    sh 'docker build --file=Dockerfile --tag=discovery-server:latest --rm=true .'
+   // sh 'D3 build --file=Dockerfile --tag=discovery-server:latest --rm=true .'
     //docker run --name=discovery-server --publish=8080:8080  discovery-server:latests
 
-}
+//}
