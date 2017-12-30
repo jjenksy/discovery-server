@@ -59,7 +59,7 @@ stage ('archival') {
 }
 
 stage ('deploy'){
-     sh '/mvnw install dockerfile:build'
+     //sh '/mvnw install dockerfile:build'
      notify('Complete')
 }
 
