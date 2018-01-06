@@ -4,7 +4,6 @@ node {
     try {
 
        checkout scm
-       mvnHome = tool 'M3'
        
        stash includes: '**', name: 'chekout'
 
@@ -13,11 +12,18 @@ node {
         currentBuild.result = 'FAILURE'
     }
 }
+
+}
+
+node('build-agent-linux')  {
 stage('Build') {
       // Run the maven build
+          sh 'ls'
+          unstash 'chekout'
+          sh 'ls'
       try {
 
-        sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore clean package"
+        sh ' mvn clean package'
 
       } catch(err) {
         notify("Error ${err}")
@@ -36,18 +42,8 @@ stage ('archival') {
                excludes: null])
 }
 
-}
-
-// input 'Deploy?'
-
-stage name: 'Deploy', concurrency: 1
-node('build-agent-linux')  {
-
 stage ('deploy'){
-    
-    sh 'ls'
-    unstash 'chekout'
-    sh 'ls'
+
     sh 'sudo docker version'
 }
 
