@@ -1,31 +1,18 @@
-
 node {
-
-stage ('Checkout'){
+    
+    stage ('Checkout'){
     try {
 
-       // git 'https://github.com/jjenksy/discovery-server.git'
-        checkout scm
+       checkout scm
+       mvnHome = tool 'M3'
+       
+       stash includes: '**', name: 'chekout'
 
     }catch(err) {
-        notify("Error ${err}")
+       // notify("Error ${err}")
         currentBuild.result = 'FAILURE'
     }
-
-     mvnHome = tool 'M3'
 }
-// stage ('Verify'){
-//     try {
-
-//         sh "'${mvnHome}/bin/mvn' mvn clean verify"
-
-
-//     }catch(err) {
-//         notify("Error ${err}")
-//         currentBuild.result = 'FAILURE'
-//     }
-
-// }
 stage('Build') {
       // Run the maven build
       try {
@@ -40,13 +27,6 @@ stage('Build') {
 }
 
 stage ('archival') {
-        //code coverage report but needs jacoco plugin
-        // publishHTML(target: [allowMissing: true,
-        //                 alwaysLinkToLastBuild: false,
-        //                 keepAll: true,
-        //                 reportDir: 'target/site/jacoco/',
-        //                 reportFiles: 'index.html',
-        //                 reportName: 'Code Coverage'])
 
         step([$class: 'JUnitResultArchiver',
               testResults: 'target/surefire-reports/TEST-*.xml'])
@@ -54,13 +34,21 @@ stage ('archival') {
         step([$class: 'ArtifactArchiver',
                artifacts: "target/*.?ar",
                excludes: null])
-
+}
 
 }
 
+// input 'Deploy?'
+
+stage name: 'Deploy', concurrency: 1
+node('build-agent-linux')  {
+
 stage ('deploy'){
-     //sh '/mvnw install dockerfile:build'
-     notify('Complete')
+    
+    sh 'ls'
+    unstash 'chekout'
+    sh ls
+    sh 'sudo docker version'
 }
 
 }
@@ -73,14 +61,3 @@ def notify(status){
         <p>Check console output at <a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a></p>""",
     )
 }
-
-//input 'Deploy?'
-
-//stage name: 'Deploy', concurrency: 1
-//node {
-    //sh "<h1>echo 'Deploy: {env.BUILD_DISPLAY_NAME}</h1>'"
-    //run the docker compose
-   // sh 'dockerHome build --file=Dockerfile --tag=discovery-server:latest --rm=true .'
-    //docker run --name=discovery-server --publish=8080:8080  discovery-server:latests
-
-//}
