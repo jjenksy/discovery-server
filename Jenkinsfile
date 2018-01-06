@@ -4,8 +4,8 @@ node ('master'){
     try {
 
        checkout scm
-       
-       stash includes: '**', name: 'chekout'
+        mvnHome = tool 'M3'
+
 
     }catch(err) {
        // notify("Error ${err}")
@@ -13,17 +13,12 @@ node ('master'){
     }
 }
 
-}
-
-node('build-agent-linux')  {
 stage('Build') {
       // Run the maven build
-          sh 'ls'
-          unstash 'chekout'
-          sh 'ls'
+
       try {
 
-        sh ' mvn clean package'
+        sh "'${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore clean package"
 
       } catch(err) {
         notify("Error ${err}")
@@ -40,10 +35,19 @@ stage ('archival') {
         step([$class: 'ArtifactArchiver',
                artifacts: "target/*.?ar",
                excludes: null])
+
+         stash includes: '**', name: 'archive'
 }
+
+}
+
+node('build-agent-linux')  {
 
 stage ('deploy'){
 
+     sh 'ls'
+     unstash 'archive'
+     sh 'ls'
     sh 'sudo docker version'
 }
 
