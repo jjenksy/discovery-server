@@ -47,7 +47,7 @@ stage ('deploy'){
     
     sh 'ls'
     unstash 'chekout'
-    sh ls
+    sh 'ls'
     sh 'sudo docker version'
 }
 
