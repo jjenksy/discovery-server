@@ -46,11 +46,13 @@ node('build-agent-linux')  {
 stage ('deploy'){
 
 
-     sh 'rm -rf *'
-     sh 'ls'
-     unstash 'archive'
-     sh 'ls'
-    sh 'sudo docker version'
+    sh 'rm -rf *'
+    sh 'ls'
+    unstash 'archive'
+    sh 'ls'
+    sh 'sudo docker build -t evision .'
+    sh 'sudo docker rmi'
+    sh 'sudo docker run -d -p 8080:8080 --name evison evision'
 
     cleanWs()
 }
