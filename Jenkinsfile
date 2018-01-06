@@ -45,10 +45,14 @@ node('build-agent-linux')  {
 
 stage ('deploy'){
 
+
+     sh 'rm -rf *'
      sh 'ls'
      unstash 'archive'
      sh 'ls'
     sh 'sudo docker version'
+
+    cleanWs()
 }
 
 }
